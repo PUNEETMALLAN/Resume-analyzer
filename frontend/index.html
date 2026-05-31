@@ -1,0 +1,2323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Resume.ai — Beat the ATS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+        
+         :root {
+            --bg: #0a0a0f;
+            --bg2: #111118;
+            --bg3: #1a1a24;
+            --border: #ffffff0f;
+            --border2: #ffffff1a;
+            --accent: #7c6af7;
+            --accent2: #a78bfa;
+            --accent-glow: #7c6af740;
+            --green: #22c55e;
+            --green-bg: #22c55e0a;
+            --red: #ef4444;
+            --red-bg: #ef444410;
+            --amber: #f59e0b;
+            --amber-bg: #f59e0b10;
+            --text: #f0f0f8;
+            --text2: #9090aa;
+            --text3: #55556a;
+            --radius: 14px;
+            --radius-sm: 8px;
+        }
+        
+        html {
+            scroll-behavior: smooth
+        }
+        
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 56px 56px;
+            pointer-events: none;
+            z-index: 0
+        }
+        
+        body::after {
+            content: '';
+            position: fixed;
+            top: -35%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 750px;
+            height: 550px;
+            background: radial-gradient(ellipse, #7c6af718 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0
+        }
+        /* PAGE SYSTEM */
+        
+        #app {
+            position: relative;
+            z-index: 1;
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 24px 60px
+        }
+        
+        .page {
+            display: none
+        }
+        
+        .page.active {
+            display: block
+        }
+        /* NAV */
+        
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding: 24px 0 12px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border)
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Syne', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -.03em;
+            cursor: pointer
+        }
+        
+        .logo-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent)
+        }
+        
+        .logo em {
+            color: var(--accent);
+            font-style: normal
+        }
+        
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex: 1;
+            justify-content: center
+        }
+        
+        .nav-link {
+            color: var(--text2);
+            font-size: 12px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: .18em;
+            transition: color .2s;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'DM Mono', monospace
+        }
+        
+        .nav-link:hover {
+            color: #fff
+        }
+        
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, .06);
+            border: 1px solid rgba(255, 255, 255, .12);
+            color: #fff;
+            border-radius: 999px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .12em;
+            transition: all .2s;
+            font-family: 'DM Mono', monospace
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, .12)
+        }
+        
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px
+        }
+        
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text2)
+        }
+        
+        .nav-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff
+        }
+        
+        .nav-status {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 11px;
+            color: var(--text3)
+        }
+        
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--green);
+            transition: background .3s
+        }
+        
+        .status-dot.busy {
+            background: var(--amber)
+        }
+        
+        .logout-btn {
+            background: transparent;
+            border: 1px solid var(--border2);
+            border-radius: var(--radius-sm);
+            color: var(--text3);
+            font-size: 11px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-family: 'DM Mono', monospace;
+            transition: all .2s
+        }
+        
+        .logout-btn:hover {
+            color: var(--red);
+            border-color: var(--red)
+        }
+        /* AUTH PAGE */
+        
+        .hero-layout {
+            display: grid;
+            grid-template-columns: minmax(280px, 1.15fr) minmax(320px, 0.85fr);
+            gap: 48px;
+            align-items: center;
+            min-height: 82vh;
+            padding-top: 12px;
+        }
+        
+        @media(max-width:940px) {
+            .hero-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .hero-copy .eyebrow {
+            border-color: rgba(255, 255, 255, .14);
+            color: var(--text2);
+            display: inline-flex;
+            align-items: center;
+            font-size: 11px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            border: 1px solid;
+            border-radius: 999px;
+            padding: 10px 18px;
+            margin-bottom: 24px;
+            background: rgba(255, 255, 255, .04);
+        }
+        
+        .hero-copy h1 {
+            font-size: clamp(52px, 7vw, 88px);
+            line-height: .95;
+            margin-bottom: 24px;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            letter-spacing: -.03em;
+            max-width: 10ch;
+        }
+        
+        .hero-copy h1 span {
+            background: linear-gradient(135deg, #7c6af7, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-copy .hero-sub {
+            font-size: 16px;
+            max-width: 560px;
+            line-height: 1.85;
+            margin-bottom: 34px;
+            color: var(--text2);
+        }
+        
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .hero-actions .btn-primary,
+        .hero-actions .btn-secondary {
+            min-width: 170px;
+        }
+        
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            max-width: 560px;
+        }
+        
+        .hero-stat {
+            padding: 20px 22px;
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 22px;
+            background: rgba(255, 255, 255, .04);
+            color: var(--text);
+        }
+        
+        .hero-stat strong {
+            display: block;
+            font-size: 24px;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        
+        .hero-panel {
+            position: relative;
+            min-height: 560px;
+            background: rgba(255, 255, 255, .03);
+            border-radius: 36px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        
+        .hero-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 24%, rgba(124, 106, 247, .18), transparent 18%), radial-gradient(circle at 80% 26%, rgba(167, 139, 250, .14), transparent 18%), radial-gradient(circle at 50% 80%, rgba(255, 255, 255, .08), transparent 16%);
+            pointer-events: none;
+        }
+        
+        .hero-panel::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255, 255, 255, .08), transparent 55%);
+            pointer-events: none;
+        }
+        
+        .hero-panel-inner {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 420px;
+            display: grid;
+            gap: 24px;
+        }
+        
+        .hero-visual {
+            border-radius: 28px;
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid rgba(255, 255, 255, .1);
+            padding: 26px;
+            display: grid;
+            gap: 18px;
+        }
+        
+        .hero-visual-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .08);
+            color: var(--text);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .12em;
+        }
+        
+        .hero-visual h2 {
+            font-size: 22px;
+            margin: 0;
+        }
+        
+        .hero-visual p {
+            color: var(--text2);
+            line-height: 1.75;
+            margin: 0;
+        }
+        
+        .hero-visual-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .hero-visual-tags span {
+            background: rgba(255, 255, 255, .08);
+            color: var(--text);
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+        }
+        
+        .auth-box {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            border-radius: 28px;
+            padding: 32px 28px;
+            background: rgba(7, 8, 18, .96);
+            border: 1px solid rgba(255, 255, 255, .12);
+            box-shadow: 0 28px 70px rgba(0, 0, 0, .24);
+        }
+        /* DASHBOARD: Clean sidebar + main + rightbar */
+        
+        body.dashboard-mode {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .dashboard-wrap {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+        }
+        
+        .sidebar {
+            width: 260px;
+            background: #080d1f;
+            padding: 20px;
+            border-right: 1px solid rgba(255, 255, 255, .05);
+            overflow-y: auto;
+        }
+        
+        .sidebar .logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 40px;
+        }
+        
+        .sidebar .nav-item {
+            padding: 14px;
+            border-radius: 12px;
+            color: #c8c8c8;
+            text-decoration: none;
+            cursor: pointer;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .sidebar .nav-item:hover {
+            background: rgba(255, 255, 255, .05);
+        }
+        
+        .sidebar .nav-item.active {
+            background: linear-gradient(90deg, #6f3cff, #8f5cff);
+            color: white;
+        }
+        
+        .dashboard-main {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            background: #050816;
+        }
+        
+        .dashboard-header {
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-header h1 {
+            font-size: 64px;
+            font-weight: 800;
+            line-height: 1;
+            margin: 0;
+        }
+        
+        .dashboard-header h1 span {
+            color: #7b5cff;
+        }
+        
+        .dashboard-header .sub {
+            margin-top: 15px;
+            color: #999;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .metric-card {
+            background: #0a1024;
+            border: 1px solid rgba(255, 255, 255, .05);
+            padding: 24px;
+            border-radius: 20px;
+            text-align: center;
+        }
+        
+        .metric-card h3 {
+            font-size: 14px;
+            color: #999;
+            margin: 0 0 10px;
+            font-weight: 500;
+        }
+        
+        .metric-card h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin: 0;
+        }
+        
+        .score-ring {
+            height: 150px;
+            width: 150px;
+            border-radius: 50%;
+            border: 10px solid #7b5cff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: bold;
+            margin: 0 auto;
+        }
+        
+        .upload-area {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .panel {
+            background: #0a1024;
+            border-radius: 20px;
+            padding: 20px;
+        }
+        
+        .panel h3 {
+            margin: 0 0 15px;
+        }
+        
+        .dropzone {
+            height: 220px;
+            border: 2px dashed #444;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+        
+        .panel textarea {
+            width: 100%;
+            height: 220px;
+            background: #050816;
+            border: none;
+            outline: none;
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: none;
+        }
+        
+        .panel textarea::placeholder {
+            color: #666;
+        }
+        
+        .panel button {
+            width: 100%;
+            padding: 16px;
+            margin-top: 15px;
+            background: linear-gradient(90deg, #7b5cff, #9d7cff);
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        
+        .panel button:hover {
+            opacity: 0.9;
+        }
+        
+        .assistant-panel {
+            width: 320px;
+            background: #080d1f;
+            padding: 20px;
+            border-left: 1px solid rgba(255, 255, 255, .05);
+            overflow-y: auto;
+        }
+        
+        .assistant-card {
+            background: #0a1024;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .assistant-card h2 {
+            margin: 0 0 10px;
+            font-size: 16px;
+        }
+        
+        .assistant-card p {
+            color: #999;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .tip {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .05);
+            color: #999;
+            font-size: 13px;
+        }
+        
+        .tip:last-child {
+            border-bottom: none;
+        }
+        
+        @media (max-width: 1200px) {
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .upload-area {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-wrap {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, .05);
+            }
+            .dashboard-main {
+                flex: 1;
+                padding: 20px;
+            }
+            .assistant-panel {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid rgba(255, 255, 255, .05);
+            }
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-header h1 {
+                font-size: 40px;
+            }
+        }
+        
+        .auth-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -.02em;
+            margin-bottom: 6px
+        }
+        
+        .auth-sub {
+            font-size: 12px;
+            color: var(--text3);
+            margin-bottom: 28px
+        }
+        
+        .auth-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bg3);
+            border-radius: var(--radius-sm);
+            padding: 4px;
+            margin-bottom: 24px
+        }
+        
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            font-size: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text3);
+            transition: all .2s;
+            border: none;
+            background: transparent;
+            font-family: 'DM Mono', monospace
+        }
+        
+        .auth-tab.active {
+            background: linear-gradient(135deg, #7c6af7, #a78bfa);
+            color: #fff;
+            box-shadow: 0 18px 40px rgba(124, 106, 247, .25)
+        }
+        
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            margin-bottom: 16px
+        }
+        
+        .field-label {
+            font-size: 11px;
+            color: var(--text3);
+            letter-spacing: .08em;
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+        
+        .field-label::before {
+            content: '';
+            display: block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent)
+        }
+        
+        input[type=text],
+        input[type=email],
+        input[type=password],
+        input[type=number] {
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .1);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            padding: 11px 14px;
+            outline: none;
+            width: 100%;
+            transition: all .2s
+        }
+        
+        input:focus {
+            border-color: #7c6af750;
+            background: rgba(255, 255, 255, .07)
+        }
+        
+        input::placeholder {
+            color: var(--text3)
+        }
+        
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #7c6af7, #a78bfa);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 13px 20px;
+            font-size: 13px;
+            font-family: 'DM Mono', monospace;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            letter-spacing: .04em;
+            transition: all .2s;
+            margin-top: 4px;
+            box-shadow: 0 18px 40px rgba(124, 106, 247, .2)
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background: linear-gradient(135deg, #8867f5, #9f7fff);
+            transform: translateY(-1px)
+        }
+        
+        .btn-primary:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+            transform: none
+        }
+        
+        .auth-divider {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text3);
+            margin: 16px 0
+        }
+        
+        .err-box {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            color: var(--red);
+            font-size: 12px;
+            background: var(--red-bg);
+            border: 1px solid #ef444422;
+            border-radius: var(--radius-sm);
+            padding: 10px 13px;
+            margin-bottom: 14px
+        }
+        
+        .success-box {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            color: var(--green);
+            font-size: 12px;
+            background: var(--green-bg);
+            border: 1px solid #22c55e22;
+            border-radius: var(--radius-sm);
+            padding: 10px 13px;
+            margin-bottom: 14px
+        }
+        /* OTP */
+        
+        .otp-info {
+            font-size: 12px;
+            color: var(--text2);
+            margin-bottom: 16px;
+            line-height: 1.6;
+            padding: 10px 14px;
+            background: var(--bg3);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border)
+        }
+        /* ANALYZER PAGE */
+        
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeUp .6s ease both
+        }
+        
+        .eyebrow {
+            display: inline-block;
+            font-size: 11px;
+            color: var(--text3);
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 5px 16px;
+            margin-bottom: 18px
+        }
+        
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(32px, 5vw, 60px);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -.03em;
+            margin-bottom: 14px
+        }
+        
+        h1 span {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+        
+        .hero-sub {
+            font-size: 14px;
+            color: var(--text2);
+            line-height: 1.8;
+            max-width: 420px;
+            margin: 0 auto
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            align-items: start
+        }
+        
+        @media(max-width:680px) {
+            .main-grid {
+                grid-template-columns: 1fr
+            }
+        }
+        
+        .panel {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            animation: fadeUp .5s ease both
+        }
+        
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px 20px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg3)
+        }
+        
+        .panel-label {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 11px;
+            color: var(--text3);
+            letter-spacing: .1em
+        }
+        
+        .panel-num {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--accent)
+        }
+        
+        .panel-body {
+            padding: 20px
+        }
+        
+        .drop-zone {
+            border: 1.5px dashed var(--border2);
+            border-radius: var(--radius-sm);
+            padding: 26px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: all .2s;
+            background: var(--bg);
+            margin-bottom: 18px
+        }
+        
+        .drop-zone:hover,
+        .drop-zone.drag {
+            border-color: var(--accent);
+            background: var(--accent-glow)
+        }
+        
+        .drop-zone.has-file {
+            border-color: var(--green);
+            border-style: solid;
+            background: var(--green-bg)
+        }
+        
+        .drop-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 10px;
+            background: var(--bg3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 20px
+        }
+        
+        .drop-main {
+            font-size: 13px;
+            color: var(--text)
+        }
+        
+        .drop-main.ok {
+            color: var(--green)
+        }
+        
+        .drop-sub {
+            font-size: 11px;
+            color: var(--text3);
+            margin-top: 3px
+        }
+        
+        textarea {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            padding: 12px 14px;
+            resize: vertical;
+            outline: none;
+            width: 100%;
+            line-height: 1.7;
+            transition: border-color .2s
+        }
+        
+        textarea:focus {
+            border-color: #7c6af750
+        }
+        
+        textarea::placeholder {
+            color: var(--text3)
+        }
+        
+        .char-count {
+            font-size: 11px;
+            text-align: right;
+            margin-top: 6px
+        }
+        
+        .error-box {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            color: var(--red);
+            font-size: 12px;
+            background: var(--red-bg);
+            border: 1px solid #ef444422;
+            border-radius: var(--radius-sm);
+            padding: 10px 13px;
+            margin-bottom: 14px
+        }
+        
+        .btn-analyze {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #7c6af7, #a78bfa);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 13px 20px;
+            font-size: 12px;
+            font-family: 'DM Mono', monospace;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            letter-spacing: .04em;
+            transition: all .2s;
+            box-shadow: 0 0 20px var(--accent-glow)
+        }
+        
+        .btn-analyze:hover:not(:disabled) {
+            background: linear-gradient(135deg, #8867f5, #9f7fff)
+        }
+        
+        .btn-analyze:disabled {
+            opacity: .6;
+            cursor: not-allowed
+        }
+        
+        .spinner {
+            width: 13px;
+            height: 13px;
+            border: 2px solid #ffffff30;
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin .7s linear infinite
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+        
+        .empty-state {
+            border: 1.5px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 44px 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 10px
+        }
+        
+        .empty-icon {
+            width: 66px;
+            height: 66px;
+            background: var(--bg3);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 6px
+        }
+        
+        .empty-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text2)
+        }
+        
+        .empty-sub {
+            font-size: 12px;
+            color: var(--text3);
+            line-height: 1.6;
+            max-width: 220px
+        }
+        
+        .steps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 14px;
+            width: 100%;
+            max-width: 250px
+        }
+        
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 9px 13px
+        }
+        
+        .step-num {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--accent);
+            flex-shrink: 0
+        }
+        
+        .step-txt {
+            font-size: 11px;
+            color: var(--text3)
+        }
+        
+        .result-panel {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            animation: fadeUp .4s ease both
+        }
+        
+        .result-header {
+            padding: 22px 22px 18px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap
+        }
+        
+        .analysis-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 10px;
+            color: var(--green);
+            background: var(--green-bg);
+            border: 1px solid #22c55e22;
+            border-radius: 100px;
+            padding: 4px 11px;
+            letter-spacing: .07em;
+            margin-bottom: 8px
+        }
+        
+        .tag-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--green)
+        }
+        
+        .result-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -.02em;
+            margin-bottom: 6px
+        }
+        
+        .result-summary {
+            font-size: 12px;
+            color: var(--text2);
+            line-height: 1.7;
+            max-width: 340px
+        }
+        
+        .ring-wrap {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            flex-shrink: 0
+        }
+        
+        .ring-inner {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center
+        }
+        
+        .ring-score {
+            font-family: 'Syne', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1
+        }
+        
+        .ring-pct {
+            font-size: 12px;
+            color: var(--text3);
+            margin-top: -2px
+        }
+        
+        .ring-label {
+            font-size: 9px;
+            letter-spacing: .06em;
+            margin-top: 4px
+        }
+        
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0 22px
+        }
+        
+        .section {
+            padding: 18px 22px
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px
+        }
+        
+        .section-title {
+            font-size: 10px;
+            color: var(--text3);
+            letter-spacing: .1em;
+            flex: 1
+        }
+        
+        .kw-count {
+            font-size: 10px;
+            background: var(--amber-bg);
+            color: var(--amber);
+            border: 1px solid #f59e0b22;
+            border-radius: 100px;
+            padding: 2px 8px
+        }
+        
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px
+        }
+        
+        .keyword {
+            font-size: 11px;
+            background: var(--amber-bg);
+            color: var(--amber);
+            border: 1px solid #f59e0b22;
+            border-radius: var(--radius-sm);
+            padding: 4px 10px
+        }
+        
+        .suggestions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+        
+        .suggestion {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 11px 14px
+        }
+        
+        .sug-num {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--accent2);
+            flex-shrink: 0;
+            padding-top: 2px
+        }
+        
+        .sug-text {
+            font-size: 12px;
+            color: var(--text2);
+            line-height: 1.65
+        }
+        
+        .reset-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text3);
+            font-size: 10px;
+            padding: 4px 9px;
+            cursor: pointer;
+            font-family: 'DM Mono', monospace;
+            transition: all .2s
+        }
+        
+        .reset-btn:hover {
+            border-color: var(--border2);
+            color: var(--text2)
+        }
+        
+        .history-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 8px
+        }
+        
+        .history-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            cursor: pointer;
+            transition: border-color .2s
+        }
+        
+        .history-card:hover {
+            border-color: var(--accent)
+        }
+        
+        .history-filename {
+            font-size: 13px;
+            color: var(--text);
+            margin-bottom: 3px
+        }
+        
+        .history-date {
+            font-size: 11px;
+            color: var(--text3)
+        }
+        
+        .history-score {
+            font-family: 'Syne', sans-serif;
+            font-size: 20px;
+            font-weight: 800
+        }
+        
+        footer {
+            text-align: center;
+            padding: 28px 0 4px;
+            border-top: 1px solid var(--border);
+            margin-top: 48px;
+            font-size: 11px;
+            color: var(--text3)
+        }
+        
+        footer em {
+            color: var(--accent);
+            font-style: normal
+        }
+        
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px)
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+
+        <!-- ════════════ NAV (always visible) ════════════ -->
+        <nav>
+            <div class="logo" onclick="goHome()">
+                <div class="logo-dot"></div>resume<em>.</em>ai
+            </div>
+            <div class="nav-menu">
+                <a class="nav-link" href="#" onclick="showPage('dashboard')">Dashboard</a>
+                <a class="nav-link" href="#">Product</a>
+                <a class="nav-link" href="#">About</a>
+                <a class="nav-link" href="#">Support</a>
+            </div>
+            <div class="nav-actions">
+                <div class="nav-status" id="navStatus" style="display:none">
+                    <div class="status-dot" id="statusDot"></div>
+                    <span id="statusText">ready</span>
+                </div>
+                <div class="nav-user" id="navUser" style="display:none">
+                    <div class="nav-avatar" id="navAvatar">P</div>
+                    <span id="navName">User</span>
+                </div>
+                <button class="logout-btn" id="logoutBtn" style="display:none" onclick="doLogout()">logout</button>
+                <button class="btn-secondary" id="navOrderBtn" onclick="switchTab('register')">Get started free</button>
+            </div>
+        </nav>
+
+        <!-- ════════════ PAGE: HOME (public landing) ════════════ -->
+        <div class="page active" id="page-home">
+            <div style="text-align:center;padding:48px 0 10px;">
+                <div class="eyebrow" style="display:inline-block;margin-bottom:18px">AI-Powered · Free · Instant</div>
+                <h1 style="font-family:'Syne',sans-serif;font-size:64px;line-height:0.95;margin:12px 0 8px">Beat the ATS.<br><span style="background:linear-gradient(135deg,#7c6af7,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Land the job.</span></h1>
+                <p style="color:var(--text2);max-width:760px;margin:12px auto 28px;line-height:1.8">Upload your resume and paste a job description. Get an AI match score, missing keywords, and rewrite tips in seconds.</p>
+                <div style="display:flex;gap:12px;justify-content:center;margin-bottom:36px">
+                    <button class="btn-primary" onclick="showPage('dashboard')">New Scan</button>
+                    <button class="btn-secondary" onclick="showPage('auth')">Sign in</button>
+                </div>
+            </div>
+
+            <!-- Analyzer input panels (left) and report preview (right) -->
+            <div class="main-grid" style="max-width:1100px;margin:0 auto;gap:28px;padding:0 20px 40px">
+                <!-- LEFT: upload + job description -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-label"><span class="panel-num">01</span> input</div>
+                    </div>
+                    <div class="panel-body">
+                        <input type="file" id="fileInputHome" accept=".pdf" style="display:none">
+                        <div class="drop-zone" id="dropZoneHome" onclick="document.getElementById('fileInputHome').click()">
+                            <div class="drop-icon" id="dropIconHome">📄</div>
+                            <div class="drop-text">
+                                <div class="drop-main" id="dropMainHome">Drop your resume here</div>
+                                <div class="drop-sub" id="dropSubHome">or click to browse · PDF only</div>
+                            </div>
+                        </div>
+
+                        <div class="field" style="margin-bottom:0">
+                            <div class="field-label">job_description</div>
+                            <textarea id="jdInputHome" rows="7" placeholder="paste the job description here..."></textarea>
+                            <div class="char-count">
+                                <span id="charCountHome" style="color:var(--red)">0</span>
+                                <span style="color:var(--text3)"> / min 50 chars</span>
+                            </div>
+                        </div>
+
+                        <div class="error-box" id="analyzeErrHome" style="margin-top:14px;display:none">
+                            ⚠ <span id="analyzeErrMsgHome"></span>
+                        </div>
+
+                        <button class="btn-analyze" id="analyzeBtnHome" onclick="doAnalyzeHome()" style="margin-top:14px">🔍 analyze resume</button>
+                    </div>
+                </div>
+
+                <!-- RIGHT: report preview -->
+                <div id="rightColHome">
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <div class="empty-title">your report appears here</div>
+                        <p class="empty-sub">upload a PDF and paste a job description to get started</p>
+                        <div class="steps-list">
+                            <div class="step-item"><span class="step-num">01</span><span class="step-txt">upload pdf resume</span></div>
+                            <div class="step-item"><span class="step-num">02</span><span class="step-txt">paste job description</span></div>
+                            <div class="step-item"><span class="step-num">03</span><span class="step-txt">get ai analysis</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ════════════ PAGE: AUTH (login/register) ════════════ -->
+        <div class="page" id="page-auth">
+            <div class="auth-wrap" style="min-height:80vh;display:flex;align-items:center;justify-content:center;padding:40px 0">
+                <div class="auth-box" style="max-width:420px;width:100%">
+
+                    <div class="auth-title" id="authTitle">Welcome back 👋</div>
+                    <p class="auth-sub" id="authSubText">Sign in to analyze your resume with AI</p>
+
+                    <!-- STEP 1: Login / Register -->
+                    <div id="stepCredentials">
+                        <div class="auth-tabs">
+                            <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign in</button>
+                            <button class="auth-tab" id="tab-register" onclick="switchTab('register')">Register</button>
+                        </div>
+
+                        <div class="err-box" id="authErr">⚠ <span id="authErrMsg"></span></div>
+                        <div class="success-box" id="authSuccess">✓ <span id="authSuccessMsg"></span></div>
+
+                        <div class="field" id="nameField" style="display:none">
+                            <div class="field-label">full name</div>
+                            <input type="text" id="authName" placeholder="Puneet Kumar">
+                        </div>
+
+                        <div class="field">
+                            <div class="field-label">email address</div>
+                            <input type="email" id="authEmail" placeholder="you@example.com">
+                        </div>
+
+                        <div class="field">
+                            <div class="field-label">password</div>
+                            <input type="password" id="authPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')doAuth()">
+                        </div>
+
+                        <button class="btn-primary" id="authBtn" onclick="doAuth()">Sign in →</button>
+
+                        <div class="auth-divider" id="authSwitch">
+                            No account? <span style="color:var(--accent);cursor:pointer" onclick="switchTab('register')">Register free</span>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: OTP Verification -->
+                    <div id="stepOtp" style="display:none">
+                        <div class="otp-info" id="otpInfo">
+                            📧 We sent a 6-digit code to your email. Enter it below to verify your account.
+                        </div>
+
+                        <div class="err-box" id="otpErr">⚠ <span id="otpErrMsg"></span></div>
+                        <div class="success-box" id="otpSuccess">✓ <span id="otpSuccessMsg"></span></div>
+
+                        <div class="field">
+                            <div class="field-label">6-digit verification code</div>
+                            <input type="number" id="otpInput" placeholder="123456" maxlength="6" style="font-size:20px;letter-spacing:.2em;text-align:center;padding:14px" onkeydown="if(event.key==='Enter')doVerifyOtp()">
+                        </div>
+
+                        <div style="font-size:11px;color:var(--text3);margin-bottom:16px;text-align:center">
+                            Code expires in <span id="otpTimer" style="color:var(--accent)">10:00</span>
+                        </div>
+
+                        <button class="btn-primary" id="otpBtn" onclick="doVerifyOtp()">Verify & Continue →</button>
+
+                        <div class="auth-divider">
+                            <span style="color:var(--accent);cursor:pointer" onclick="backToRegister()">← Try different email</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════ PAGE: ANALYZER ════════════ -->
+        <div class="page" id="page-analyzer">
+            <div class="hero">
+                <div class="eyebrow">AI-powered · free · instant</div>
+                <h1>Beat the ATS.<br><span>Land the job.</span></h1>
+                <p class="hero-sub">Upload your resume and paste a job description. Get an AI match score, missing keywords, and rewrite tips in seconds.</p>
+            </div>
+
+            <div class="main-grid">
+                <!-- LEFT: upload form -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-label"><span class="panel-num">01</span> input</div>
+                    </div>
+                    <div class="panel-body">
+                        <input type="file" id="fileInput" accept=".pdf" style="display:none">
+                        <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave()" ondrop="handleDrop(event)">
+                            <div class="drop-icon" id="dropIcon">📄</div>
+                            <div>
+                                <div class="drop-main" id="dropMain">Drop your resume here</div>
+                                <div class="drop-sub" id="dropSub">or click to browse · PDF only</div>
+                            </div>
+                        </div>
+
+                        <div class="field" style="margin-bottom:0">
+                            <div class="field-label">job_description</div>
+                            <textarea id="jdInput" rows="7" placeholder="paste the job description here..."></textarea>
+                            <div class="char-count">
+                                <span id="charCount" style="color:var(--red)">0</span>
+                                <span style="color:var(--text3)"> / min 50 chars</span>
+                            </div>
+                        </div>
+
+                        <div class="error-box" id="analyzeErr" style="margin-top:14px">
+                            ⚠ <span id="analyzeErrMsg"></span>
+                        </div>
+
+                        <button class="btn-analyze" id="analyzeBtn" onclick="doAnalyze()" style="margin-top:14px">
+            🔍 analyze resume
+          </button>
+                    </div>
+                </div>
+
+                <!-- RIGHT: result -->
+                <div id="rightCol">
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <div class="empty-title">your report appears here</div>
+                        <p class="empty-sub">upload a PDF and paste a job description to get started</p>
+                        <div class="steps-list">
+                            <div class="step-item"><span class="step-num">01</span><span class="step-txt">upload pdf resume</span></div>
+                            <div class="step-item"><span class="step-num">02</span><span class="step-txt">paste job description</span></div>
+                            <div class="step-item"><span class="step-num">03</span><span class="step-txt">get ai analysis</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HISTORY -->
+            <div style="margin-top:32px">
+                <div class="panel-header" style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:12px">
+                    <div class="panel-label"><span class="panel-num">03</span> my scan history</div>
+                    <span style="font-size:11px;color:var(--text3)" id="historyCount"></span>
+                </div>
+                <div class="history-grid" id="historyGrid">
+                    <div style="font-size:12px;color:var(--text3);text-align:center;padding:24px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm)">no scans yet — analyze your first resume above</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════ PAGE: DASHBOARD ════════════ -->
+        <div class="page" id="page-dashboard" style="display:none">
+            <div class="dashboard-wrap">
+                <div class="sidebar">
+                    <div class="logo">resume.ai</div>
+                    <div class="nav-item active">Dashboard</div>
+                    <div class="nav-item">Scan Resume</div>
+                    <div class="nav-item">History</div>
+                    <div class="nav-item">Templates</div>
+                    <div class="nav-item">AI Tools</div>
+                    <div class="nav-item">Analytics</div>
+                </div>
+
+                <div class="dashboard-main">
+                    <div class="dashboard-header">
+                        <div>
+                            <h1>Beat the <span>ATS.</span><br>Land the job.</h1>
+                            <p class="sub">AI Powered Resume Analysis</p>
+                        </div>
+                    </div>
+
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="score-ring">87%</div>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Keywords Matched</h3>
+                            <h1>32 / 42</h1>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Missing Keywords</h3>
+                            <h1>10</h1>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Improvements</h3>
+                            <h1>12</h1>
+                        </div>
+                    </div>
+
+                    <div class="upload-area">
+                        <div class="panel">
+                            <h3>Upload Resume</h3>
+                            <div class="dropzone" id="dropZoneDash" onclick="document.getElementById('fileInput').click()">Drop Resume Here</div>
+                        </div>
+                        <div class="panel">
+                            <h3>Job Description</h3>
+                            <textarea id="jdInputDash" placeholder="Paste Job Description"></textarea>
+                            <button onclick="doAnalyzeDash()">Analyze Resume</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="assistant-panel">
+                    <div class="assistant-card">
+                        <h2>AI Assistant</h2>
+                        <p>I analyzed your resume and found opportunities to improve ATS score.</p>
+                    </div>
+
+                    <div class="assistant-card">
+                        <h2>Quick Tips</h2>
+                        <div class="tip">Add measurable achievements</div>
+                        <div class="tip">Include missing keywords</div>
+                        <div class="tip">Optimize skills section</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>built with MERN + Groq · <em>resume.ai</em></footer>
+
+    </div>
+    <!-- end #app -->
+
+    <script>
+        const API = 'http://localhost:5000/api';
+        let selectedFile = null;
+        let currentTab = 'login';
+        let pendingEmail = '';
+        let otpInterval = null;
+
+        // ── STORAGE ──
+        const getToken = () => localStorage.getItem('ra_token');
+        const getUser = () => {
+            try {
+                return JSON.parse(localStorage.getItem('ra_user'));
+            } catch {
+                return null;
+            }
+        };
+        const saveAuth = (t, u) => {
+            localStorage.setItem('ra_token', t);
+            localStorage.setItem('ra_user', JSON.stringify(u));
+        };
+        const clearAuth = () => {
+            localStorage.removeItem('ra_token');
+            localStorage.removeItem('ra_user');
+        };
+
+        // ── PAGE ROUTING ──
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + id).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function goHome() {
+            if (getToken()) showPage('analyzer');
+            else showPage('home');
+        }
+
+        // ── BOOT ──
+        window.onload = function() {
+            const token = getToken(),
+                user = getUser();
+            if (token && user) {
+                setNavUser(user);
+                showPage('analyzer');
+                loadHistory();
+            } else {
+                showPage('home');
+            }
+        };
+
+        function setNavUser(user) {
+            document.getElementById('navUser').style.display = 'flex';
+            document.getElementById('navStatus').style.display = 'flex';
+            document.getElementById('logoutBtn').style.display = 'block';
+            document.getElementById('navOrderBtn').style.display = 'none';
+            document.getElementById('navAvatar').textContent = user.name.charAt(0).toUpperCase();
+            document.getElementById('navName').textContent = user.name;
+        }
+
+        // ── AUTH TABS ──
+        function switchTab(tab) {
+            currentTab = tab;
+            const tabLogin = document.getElementById('tab-login');
+            const tabRegister = document.getElementById('tab-register');
+            const nameField = document.getElementById('nameField');
+            const authBtn = document.getElementById('authBtn');
+            const authTitle = document.getElementById('authTitle');
+            const authSubText = document.getElementById('authSubText');
+            const authSwitch = document.getElementById('authSwitch');
+            if (!tabLogin) return;
+            tabLogin.classList.toggle('active', tab === 'login');
+            tabRegister.classList.toggle('active', tab === 'register');
+            nameField.style.display = tab === 'register' ? 'flex' : 'none';
+            authBtn.textContent = tab === 'login' ? 'Sign in →' : 'Send verification code →';
+            authTitle.textContent = tab === 'login' ? 'Welcome back 👋' : 'Create your account';
+            authSubText.textContent = tab === 'login' ? 'Sign in to analyze your resume with AI' : 'Start optimizing your resume for free';
+            authSwitch.innerHTML = tab === 'login' ?
+                'No account? <span style="color:var(--accent);cursor:pointer" onclick="switchTab(\'register\')">Register free</span>' :
+                'Have an account? <span style="color:var(--accent);cursor:pointer" onclick="switchTab(\'login\')">Sign in</span>';
+            hideAuthMessages();
+            // make sure we're on auth page
+            if (!document.getElementById('page-auth').classList.contains('active')) showPage('auth');
+        }
+
+        function showAuthErr(msg) {
+            const b = document.getElementById('authErr');
+            b.style.display = 'flex';
+            document.getElementById('authErrMsg').textContent = msg;
+            document.getElementById('authSuccess').style.display = 'none';
+        }
+
+        function showAuthSuccess(msg) {
+            const b = document.getElementById('authSuccess');
+            b.style.display = 'flex';
+            document.getElementById('authSuccessMsg').textContent = msg;
+            document.getElementById('authErr').style.display = 'none';
+        }
+
+        function hideAuthMessages() {
+            document.getElementById('authErr').style.display = 'none';
+            document.getElementById('authSuccess').style.display = 'none';
+        }
+
+        function showOtpErr(msg) {
+            const b = document.getElementById('otpErr');
+            b.style.display = 'flex';
+            document.getElementById('otpErrMsg').textContent = msg;
+            document.getElementById('otpSuccess').style.display = 'none';
+        }
+
+        function showOtpSuccess(msg) {
+            const b = document.getElementById('otpSuccess');
+            b.style.display = 'flex';
+            document.getElementById('otpSuccessMsg').textContent = msg;
+            document.getElementById('otpErr').style.display = 'none';
+        }
+
+        // ── SUBMIT AUTH ──
+        async function doAuth() {
+            hideAuthMessages();
+            const email = document.getElementById('authEmail').value.trim();
+            const password = document.getElementById('authPassword').value;
+            const name = document.getElementById('authName').value.trim();
+
+            if (!email || !password) return showAuthErr('Email and password are required.');
+            if (currentTab === 'register' && !name) return showAuthErr('Name is required.');
+
+            const btn = document.getElementById('authBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<div class="spinner"></div> Please wait...';
+
+            try {
+                if (currentTab === 'login') {
+                    const res = await fetch(API + '/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email,
+                            password
+                        })
+                    });
+                    const data = await res.json();
+                    if (!res.ok) return showAuthErr(data.error || 'Login failed.');
+                    saveAuth(data.token, data.user);
+                    setNavUser(data.user);
+                    showAuthSuccess('Login successful! Redirecting...');
+                    setTimeout(() => {
+                        showPage('analyzer');
+                        loadHistory();
+                    }, 800);
+                } else {
+                    const res = await fetch(API + '/auth/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name,
+                            email,
+                            password
+                        })
+                    });
+                    const data = await res.json();
+                    if (!res.ok) return showAuthErr(data.error || 'Registration failed.');
+                    pendingEmail = email;
+                    document.getElementById('otpInfo').textContent = `📧 We sent a 6-digit code to ${email}. Enter it below to verify.`;
+                    document.getElementById('stepCredentials').style.display = 'none';
+                    document.getElementById('stepOtp').style.display = 'block';
+                    document.getElementById('authTitle').textContent = 'Check your email 📬';
+                    document.getElementById('authSubText').textContent = 'Enter the code we sent you';
+                    startOtpTimer(600);
+                    document.getElementById('otpInput').focus();
+                }
+            } catch (err) {
+                showAuthErr('Cannot connect to server. Is the backend running on port 5000?');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = currentTab === 'login' ? 'Sign in →' : 'Send verification code →';
+            }
+        }
+
+        // ── OTP ──
+        function startOtpTimer(seconds) {
+            clearInterval(otpInterval);
+            let s = seconds;
+            const el = document.getElementById('otpTimer');
+            otpInterval = setInterval(() => {
+                s--;
+                const m = Math.floor(s / 60),
+                    sec = s % 60;
+                el.textContent = `${m}:${sec.toString().padStart(2, '0')}`;
+                if (s <= 0) {
+                    clearInterval(otpInterval);
+                    el.textContent = 'expired';
+                }
+            }, 1000);
+        }
+
+        async function doVerifyOtp() {
+            const otp = document.getElementById('otpInput').value.trim();
+            if (!otp || otp.length < 6) return showOtpErr('Please enter the 6-digit code.');
+            const btn = document.getElementById('otpBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<div class="spinner"></div> Verifying...';
+            try {
+                const res = await fetch(API + '/auth/verify-otp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: pendingEmail,
+                        otp
+                    })
+                });
+                const data = await res.json();
+                if (!res.ok) return showOtpErr(data.error || 'Invalid OTP.');
+                clearInterval(otpInterval);
+                showOtpSuccess('Email verified! Redirecting...');
+                saveAuth(data.token, data.user);
+                setNavUser(data.user);
+                setTimeout(() => {
+                    showPage('analyzer');
+                    loadHistory();
+                }, 800);
+            } catch {
+                showOtpErr('Cannot connect to server.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Verify & Continue →';
+            }
+        }
+
+        function backToRegister() {
+            clearInterval(otpInterval);
+            document.getElementById('stepOtp').style.display = 'none';
+            document.getElementById('stepCredentials').style.display = 'block';
+            document.getElementById('authTitle').textContent = 'Create your account';
+            document.getElementById('authSubText').textContent = 'Start optimizing your resume for free';
+            document.getElementById('otpInput').value = '';
+        }
+
+        // ── LOGOUT ──
+        function doLogout() {
+            clearAuth();
+            clearInterval(otpInterval);
+            document.getElementById('navUser').style.display = 'none';
+            document.getElementById('navStatus').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'none';
+            document.getElementById('navOrderBtn').style.display = 'block';
+            document.getElementById('authEmail').value = '';
+            document.getElementById('authPassword').value = '';
+            document.getElementById('authName').value = '';
+            document.getElementById('stepOtp').style.display = 'none';
+            document.getElementById('stepCredentials').style.display = 'block';
+            document.getElementById('authTitle').textContent = 'Welcome back 👋';
+            document.getElementById('authSubText').textContent = 'Sign in to analyze your resume with AI';
+            hideAuthMessages();
+            switchTab('login');
+            showPage('auth');
+        }
+
+        // ── FILE ──
+        document.getElementById('fileInput').addEventListener('change', e => setFile(e.target.files[0]));
+        document.getElementById('jdInput').addEventListener('input', function() {
+            const n = this.value.length,
+                el = document.getElementById('charCount');
+            el.textContent = n;
+            el.style.color = n < 50 ? 'var(--red)' : 'var(--green)';
+        });
+
+        function setFile(file) {
+            if (!file) return;
+            if (file.type !== 'application/pdf') {
+                showAnalyzeErr('Only PDF files are accepted.');
+                return;
+            }
+            selectedFile = file;
+            document.getElementById('dropZone').classList.add('has-file');
+            document.getElementById('dropIcon').textContent = '✅';
+            const m = document.getElementById('dropMain');
+            m.textContent = file.name;
+            m.classList.add('ok');
+            document.getElementById('dropSub').textContent = 'click to change file';
+            hideAnalyzeErr();
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            document.getElementById('dropZone').classList.add('drag');
+        }
+
+        function handleDragLeave() {
+            document.getElementById('dropZone').classList.remove('drag');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            handleDragLeave();
+            setFile(e.dataTransfer.files[0]);
+        }
+
+        function showAnalyzeErr(m) {
+            const b = document.getElementById('analyzeErr');
+            b.style.display = 'flex';
+            document.getElementById('analyzeErrMsg').textContent = m;
+        }
+
+        function hideAnalyzeErr() {
+            document.getElementById('analyzeErr').style.display = 'none';
+        }
+
+        function setBusy(busy) {
+            document.getElementById('statusDot').className = 'status-dot' + (busy ? ' busy' : '');
+            document.getElementById('statusText').textContent = busy ? 'analyzing...' : 'ready';
+            const btn = document.getElementById('analyzeBtn');
+            btn.disabled = busy;
+            btn.innerHTML = busy ? '<div class="spinner"></div> analyzing with AI...' : '🔍 analyze resume';
+        }
+
+        // Home analyzer bindings (keeps same behavior as analyzer page)
+        const fileInputHome = document.getElementById('fileInputHome');
+        fileInputHome && fileInputHome.addEventListener(
+            'change',
+            e => setFileHome(e.target.files[0])
+        );
+
+        const jdInputHome = document.getElementById('jdInputHome');
+        jdInputHome && jdInputHome.addEventListener(
+            'input',
+            function() {
+                const n = this.value.length;
+                const el = document.getElementById('charCountHome');
+                if (el) el.textContent = n;
+                if (el) el.style.color = n < 50 ? 'var(--red)' : 'var(--green)';
+            });
+
+        function setFileHome(file) {
+            if (!file) return;
+            if (file.type !== 'application/pdf') {
+                showAnalyzeErrHome('Only PDF files are accepted.');
+                return;
+            }
+            selectedFile = file;
+            const dropZoneHome = document.getElementById('dropZoneHome');
+
+            if (dropZoneHome) {
+                dropZoneHome.classList.add('has-file');
+            }
+            document.getElementById('dropIconHome') && (document.getElementById('dropIconHome').textContent = '✅');
+            const m = document.getElementById('dropMainHome');
+            if (m) {
+                m.textContent = file.name;
+                m.classList.add('ok');
+            }
+            document.getElementById('dropSubHome') && (document.getElementById('dropSubHome').textContent = 'click to change file');
+            hideAnalyzeErrHome();
+        }
+
+        function showAnalyzeErrHome(msg) {
+            const b = document.getElementById('analyzeErrHome');
+            if (b) {
+                b.style.display = 'flex';
+                document.getElementById('analyzeErrMsgHome').textContent = msg;
+            }
+        }
+
+        function hideAnalyzeErrHome() {
+            const b = document.getElementById('analyzeErrHome');
+            if (b) b.style.display = 'none';
+        }
+
+        // Main file input binding (for dashboard and analyzer pages)
+        const fileInput = document.getElementById('fileInput');
+        fileInput && fileInput.addEventListener(
+            'change',
+            e => {
+                const file = e.target.files[0];
+                if (!file) return;
+                if (file.type !== 'application/pdf') {
+                    alert('Only PDF files are accepted.');
+                    return;
+                }
+                selectedFile = file;
+                const dropZone = document.getElementById('dropZoneDash');
+                if (dropZone) {
+                    dropZone.textContent = file.name;
+                }
+            }
+        );
+
+        async function doAnalyzeHome() {
+            hideAnalyzeErrHome();
+            if (!selectedFile) {
+                showAnalyzeErrHome('Please upload a PDF resume.');
+                return;
+            }
+            const jd = document.getElementById('jdInputHome').value.trim();
+            if (jd.length < 50) {
+                showAnalyzeErrHome('Job description must be at least 50 characters.');
+                return;
+            }
+            const token = getToken();
+            if (!token) {
+                showPage('auth');
+                return;
+            }
+            setBusy(true);
+            try {
+                const fd = new FormData();
+                fd.append('resume', selectedFile);
+                fd.append('jobDescription', jd);
+                const res = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: fd
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    showAnalyzeErrHome(data.error || 'Analysis failed.');
+                    return;
+                }
+                showPage('analyzer');
+            } catch (err) {
+                showAnalyzeErrHome('Cannot connect to server: ' + (err.message || err));
+            } finally {
+                setBusy(false);
+            }
+        }
+
+        async function doAnalyzeDash() {
+            if (!selectedFile) {
+                alert('Please upload a PDF resume.');
+                return;
+            }
+            const jd = document.getElementById('jdInputDash').value.trim();
+            if (jd.length < 50) {
+                alert('Job description must be at least 50 characters.');
+                return;
+            }
+            const token = getToken();
+            if (!token) {
+                showPage('auth');
+                return;
+            }
+            setBusy(true);
+            try {
+                const fd = new FormData();
+                fd.append('resume', selectedFile);
+                fd.append('jobDescription', jd);
+                const res = await fetch(API + '/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: fd
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    alert(data.error || 'Analysis failed.');
+                    return;
+                }
+                showPage('analyzer');
+            } catch (err) {
+                alert('Cannot connect to server: ' + (err.message || err));
+            } finally {
+                setBusy(false);
+            }
+        }
+
+        // ── ANALYZE ──
+        async function doAnalyze() {
+            hideAnalyzeErr();
+            if (!selectedFile) {
+                showAnalyzeErr('Please upload a PDF resume.');
+                return;
+            }
+            const jd = document.getElementById('jdInput').value.trim();
+            if (jd.length < 50) {
+                showAnalyzeErr('Job description must be at least 50 characters.');
+                return;
+            }
+            const token = getToken();
+            if (!token) {
+                doLogout();
+                return;
+            }
+            setBusy(true);
+            const fd = new FormData();
+            fd.append('resume', selectedFile);
+            fd.append('jobDescription', jd);
+            try {
+                const res = await fetch(API + '/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: fd
+                });
+                const data = await res.json();
+                if (res.status === 401) {
+                    doLogout();
+                    return;
+                }
+                if (!res.ok) throw new Error(data.error || 'Something went wrong.');
+                renderResult(data.result);
+                loadHistory();
+            } catch (e) {
+                showAnalyzeErr(e.message || 'Could not connect to backend.');
+            } finally {
+                setBusy(false);
+            }
+        }
+
+        // ── RESULT ──
+        function renderResult(r) {
+            const score = r.matchScore;
+            const colorHex = score >= 70 ? '#22c55e' : score >= 45 ? '#f59e0b' : '#ef4444';
+            const colorVar = score >= 70 ? 'var(--green)' : score >= 45 ? 'var(--amber)' : 'var(--red)';
+            const label = score >= 70 ? 'strong match' : score >= 45 ? 'partial match' : 'weak match';
+            const R = 52,
+                circ = 2 * Math.PI * R,
+                offset = circ - (score / 100) * circ;
+            const kws = (r.missingKeywords || []).map(k => `<span class="keyword">${k}</span>`).join('');
+            const sugs = (r.suggestions || []).map((s, i) => `<div class="suggestion"><span class="sug-num">0${i+1}</span><p class="sug-text">${s}</p></div>`).join('');
+            document.getElementById('rightCol').innerHTML = `
+      <div class="result-panel">
+        <div class="panel-header"><div class="panel-label"><span class="panel-num">02</span> output</div><button class="reset-btn" onclick="resetResult()">↩ new scan</button></div>
+        <div class="result-header">
+          <div style="flex:1">
+            <div class="analysis-tag"><div class="tag-dot"></div>analysis_complete</div>
+            <div class="result-title">Resume Report</div>
+            <p class="result-summary">${r.summary}</p>
+          </div>
+          <div class="ring-wrap">
+            <svg width="130" height="130" viewBox="0 0 130 130">
+              <circle cx="65" cy="65" r="${R}" fill="none" stroke="#ffffff08" stroke-width="9"/>
+              <circle cx="65" cy="65" r="${R}" fill="none" stroke="${colorHex}" stroke-width="9"
+                stroke-linecap="round" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${circ.toFixed(1)}"
+                transform="rotate(-90 65 65)" id="scoreArc"/>
+            </svg>
+            <div class="ring-inner">
+              <span class="ring-score" style="color:${colorVar}">${score}</span>
+              <span class="ring-pct">%</span>
+              <span class="ring-label" style="color:${colorVar}">${label}</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="section">
+          <div class="section-header"><span style="font-size:15px;color:var(--amber)">⚠️</span><span class="section-title">missing_keywords</span><span class="kw-count">${(r.missingKeywords||[]).length}</span></div>
+          <div class="keywords">${kws || '<span style="color:var(--green);font-size:12px">✓ no missing keywords</span>'}</div>
+        </div>
+        <div class="divider"></div>
+        <div class="section">
+          <div class="section-header"><span style="font-size:15px;color:var(--accent2)">💡</span><span class="section-title">suggestions</span></div>
+          <div class="suggestions">${sugs}</div>
+        </div>
+      </div>`;
+            setTimeout(() => {
+                const arc = document.getElementById('scoreArc');
+                if (arc) {
+                    arc.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1)';
+                    setTimeout(() => {
+                        arc.style.strokeDashoffset = offset.toFixed(1);
+                    }, 60);
+                }
+            }, 100);
+        }
+
+        function resetResult() {
+            document.getElementById('rightCol').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <div class="empty-title">your report appears here</div>
+        <p class="empty-sub">upload a PDF and paste a job description to get started</p>
+        <div class="steps-list">
+          <div class="step-item"><span class="step-num">01</span><span class="step-txt">upload pdf resume</span></div>
+          <div class="step-item"><span class="step-num">02</span><span class="step-txt">paste job description</span></div>
+          <div class="step-item"><span class="step-num">03</span><span class="step-txt">get ai analysis</span></div>
+        </div>
+      </div>`;
+        }
+
+        // ── HISTORY ──
+        async function loadHistory() {
+            const token = getToken();
+            if (!token) return;
+            try {
+                const res = await fetch(API + '/history', {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                const data = await res.json();
+                renderHistory(data);
+            } catch {}
+        }
+
+        function renderHistory(items) {
+            document.getElementById('historyCount').textContent = items.length + ' scans';
+            const grid = document.getElementById('historyGrid');
+            if (!items.length) {
+                grid.innerHTML = '<div style="font-size:12px;color:var(--text3);text-align:center;padding:24px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm)">no scans yet — analyze your first resume above</div>';
+                return;
+            }
+            grid.innerHTML = items.map(item => {
+                const score = Math.max(
+                    0,
+                    Math.min(100, Number(item.result && item.result.matchScore) || 0)
+                );
+                const colorHex = score >= 70 ? '#22c55e' : score >= 45 ? '#f59e0b' : '#ef4444';
+                const date = new Date(item.createdAt).toLocaleDateString('en-IN', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+                return `<div class="history-card"><div><div class="history-filename">📄 ${item.fileName||'resume.pdf'}</div><div class="history-date">${date}</div></div><span class="history-score" style="color:${colorHex}">${score}%</span></div>`;
+            }).join('');
+        }
+    </script>
+</body>
+
+</html>
