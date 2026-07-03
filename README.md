@@ -26,3 +26,24 @@
 ## Notes
 
 The backend currently uses `bcryptjs` and `jsonwebtoken` for auth and stores analysis records tied to user accounts.
+
+## Deploying to Render
+
+This repo is ready for deployment to Render using a single web service.
+
+1. Connect your GitHub repository to Render.
+2. Create a new Web Service.
+3. Set the environment to `Node`.
+4. Use the following settings:
+   - Root directory: `backend`
+   - Build Command: `npm install`
+   - Start Command: `npm start`
+   - Environment Variables:
+     - `MONGO_URI`
+     - `JWT_SECRET`
+     - `CLIENT_URL` (optional, if using CORS)
+     - `EMAIL_USER`, `EMAIL_PASS`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE` (optional for email)
+     - `GROQ_API_KEY` (required for AI resume generation)
+5. Deploy the service and visit the Render URL.
+
+Because the backend now serves static files from the `/frontend` folder, the full app is available from the same domain.

@@ -7,6 +7,7 @@ dotenv.config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const path = require("path");
 const analyzeRoutes = require("./routes/analyze");
 const historyRoutes = require("./routes/history");
 const authRoutes = require("./routes/auth");
@@ -50,6 +51,12 @@ app.use("/api/build", builderRoutes);
 
 app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
+});
+
+// Serve static frontend files from the frontend directory
+app.use(express.static(path.join(__dirname, "../frontend")));
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
 
 mongoose

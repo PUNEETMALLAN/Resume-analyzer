@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: resume-analyzer
+    env: node
+    branch: main
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: MONGO_URI
+        value: ''
+      - key: JWT_SECRET
+        value: ''
+      - key: CLIENT_URL
+        value: ''
+      - key: EMAIL_USER
+        value: ''
+      - key: EMAIL_PASS
+        value: ''
+      - key: SMTP_HOST
+        value: ''
+      - key: SMTP_PORT
+        value: ''
+      - key: SMTP_SECURE
+        value: ''
+      - key: GROQ_API_KEY
+        value: ''
