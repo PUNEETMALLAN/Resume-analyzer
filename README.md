@@ -47,3 +47,14 @@ This repo is ready for deployment to Render using a single web service.
 5. Deploy the service and visit the Render URL.
 
 Because the backend now serves static files from the `/frontend` folder, the full app is available from the same domain.
+
+## GitHub-to-Render deployment
+
+You can deploy automatically from GitHub using Render's API and GitHub Actions.
+
+1. Create a Render service for this repo and note the service ID.
+2. In GitHub repo settings, add these secrets:
+   - `RENDER_API_KEY`
+   - `RENDER_SERVICE_ID`
+3. The workflow is defined in `.github/workflows/render-deploy.yml`.
+4. On each push to `main`, GitHub Actions will trigger a Render deploy.
