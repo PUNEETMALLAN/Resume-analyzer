@@ -9,6 +9,7 @@ const analysisSchema = new mongoose.Schema({
         matchScore: Number,
         missingKeywords: [String],
         suggestions: [String],
+        suggestedJobs: [String],
         summary: String,
     },
 }, { timestamps: true });

@@ -7,6 +7,9 @@ const userSchema = new mongoose.Schema({
     isVerified: { type: Boolean, default: false },
     otp: { type: String },
     otpExpiresAt: { type: Date },
+    // fields for password reset flow
+    resetOtp: { type: String },
+    resetOtpExpires: { type: Date },
 }, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);

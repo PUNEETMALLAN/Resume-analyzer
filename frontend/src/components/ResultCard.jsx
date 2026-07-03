@@ -1,24 +1,37 @@
 export default function ResultCard({ result }) {
-  const { matchScore, missingKeywords, suggestions, summary } = result;
+  const { matchScore, missingKeywords, suggestions, summary, suggestedJobs = [] } = result;
 
   return (
-    <div style={{ border: "1px solid #ccc", borderRadius: 8, padding: 20, marginTop: 24 }}>
-      <h2>Match Score: {matchScore}%</h2>
-      <p>{summary}</p>
+    <div className="result-card">
+      <div className="score-display">{matchScore}%</div>
+      <p className="summary-text">{summary}</p>
 
-      <h3>Missing Keywords</h3>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-        {missingKeywords.map((kw) => (
-          <span key={kw} style={{ background: "#fee2e2", padding: "4px 10px", borderRadius: 20, fontSize: 13 }}>
-            {kw}
-          </span>
-        ))}
+      <div className="section">
+        <h3>Missing Keywords</h3>
+        <div className="tag-grid">
+          {missingKeywords.map((kw) => (
+            <span key={kw} className="skill-tag">{kw}</span>
+          ))}
+        </div>
       </div>
 
-      <h3>Suggestions</h3>
-      <ul>
-        {suggestions.map((s, i) => <li key={i}>{s}</li>)}
-      </ul>
+      <div className="section">
+        <h3>Suggestions</h3>
+        <ul>
+          {suggestions.map((s, i) => <li key={i}>{s}</li>)}
+        </ul>
+      </div>
+
+      {suggestedJobs.length > 0 && (
+        <div className="section">
+          <h3>Suggested Job Titles</h3>
+          <div className="tag-grid">
+            {suggestedJobs.map((job) => (
+              <span key={job} className="job-tag">{job}</span>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

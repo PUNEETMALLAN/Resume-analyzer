@@ -10,6 +10,7 @@ const mongoose = require("mongoose");
 const analyzeRoutes = require("./routes/analyze");
 const historyRoutes = require("./routes/history");
 const authRoutes = require("./routes/auth");
+const builderRoutes = require("./routes/builder");
 
 require("dotenv").config();
 
@@ -33,7 +34,9 @@ const allowedOrigins = [
 
 app.use(cors({
     origin: (origin, callback) => {
+        // Allow undefined origin (curl, Postman) and 'null' origin (file:// in some browsers)
         if (!origin) return callback(null, true);
+        if (origin === 'null') return callback(null, true);
         if (allowedOrigins.includes(origin)) return callback(null, true);
         return callback(new Error('CORS origin not allowed'));
     }
@@ -43,6 +46,7 @@ app.use(express.json());
 app.use("/api/analyze", analyzeRoutes);
 app.use("/api/history", historyRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/build", builderRoutes);
 
 app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });

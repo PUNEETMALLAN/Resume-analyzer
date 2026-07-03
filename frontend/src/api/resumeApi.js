@@ -8,6 +8,9 @@ const API = axios.create({
 export const analyzeResume = (formData) =>
     API.post("/analyze", formData);
 
+export const buildResume = (analysisId) =>
+    API.post("/build", { analysisId });
+
 export const getHistory = () =>
     API.get("/history");
 
