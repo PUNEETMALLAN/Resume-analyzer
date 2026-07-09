@@ -176,10 +176,10 @@
         }
 
         .builder-mode-tabs {
-            display: inline-flex;
+            display: flex;
             gap: 10px;
             padding: 10px;
-            margin-bottom: 20px;
+            margin: 0 auto 20px;
             background: rgba(255,255,255,.04);
             border: 1px solid rgba(255,255,255,.08);
             border-radius: 999px;
@@ -198,7 +198,11 @@
             font-family: 'Inter', sans-serif;
             font-size: 13px;
             font-weight: 600;
-            transition: all 0.25s ease;
+            transition: all 0.25s ease, transform 0.3s ease;
+        }
+
+        .mode-tab:hover {
+            transform: translateY(-1px);
         }
 
         .mode-tab.active {
@@ -206,10 +210,30 @@
             border-color: rgba(255,255,255,.16);
             color: #fff;
             box-shadow: 0 10px 30px rgba(0,0,0,.15);
+            transform: translateY(-1px);
         }
 
         .builder-section {
-            display: block;
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity 0.28s ease, transform 0.28s ease;
+        }
+
+        .builder-section.active {
+            opacity: 1;
+            transform: translateY(0);
+            animation: builderSectionIn 0.36s ease both;
+        }
+
+        @keyframes builderSectionIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .dock-tab {
@@ -946,7 +970,7 @@
                 <button class="mode-tab" data-mode="freshers" onclick="switchBuilderMode('freshers')">Freshers</button>
             </div>
 
-            <div id="experiencedBuilderSection" class="builder-section">
+            <div id="experiencedBuilderSection" class="builder-section active">
                 <div class="builder-grid">
                     <div class="panel">
                         <div class="panel-header"><div class="panel-label"><span class="panel-num">01</span> resume form</div></div>
@@ -1328,8 +1352,19 @@
             document.querySelectorAll('.mode-tab').forEach(tab => {
                 tab.classList.toggle('active', tab.getAttribute('data-mode') === mode);
             });
-            document.getElementById('experiencedBuilderSection').style.display = mode === 'experienced' ? 'block' : 'none';
-            document.getElementById('freshersBuilderSection').style.display = mode === 'freshers' ? 'block' : 'none';
+            const expSection = document.getElementById('experiencedBuilderSection');
+            const freshSection = document.getElementById('freshersBuilderSection');
+            if (mode === 'experienced') {
+                expSection.style.display = 'block';
+                expSection.classList.add('active');
+                freshSection.style.display = 'none';
+                freshSection.classList.remove('active');
+            } else {
+                freshSection.style.display = 'block';
+                freshSection.classList.add('active');
+                expSection.style.display = 'none';
+                expSection.classList.remove('active');
+            }
         }
 
         async function loadHistory() {
