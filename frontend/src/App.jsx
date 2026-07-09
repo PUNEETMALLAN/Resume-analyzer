@@ -1,6 +1,7 @@
 import { useState } from "react";
 import UploadForm from "./components/UploadForm";
 import ResultCard from "./components/ResultCard";
+import HistoryList from "./components/HistoryList";
 import { buildResume } from "./api/resumeApi";
 
 export default function App() {
@@ -8,6 +9,7 @@ export default function App() {
   const [view, setView] = useState("analyze");
   const [building, setBuilding] = useState(false);
   const [buildError, setBuildError] = useState("");
+  const [history, setHistory] = useState([]);
 
   const handleBuild = async () => {
     if (!analysis?.id) {
@@ -34,71 +36,94 @@ export default function App() {
   };
 
   return (
-    <div className="app-container">
-      <header className="app-header glass-card">
-        <div className="header-left">
-          <div className="brand-row">
-            <span className="brand-dot"></span>
-            <span className="brand-name">resume.ai</span>
-          </div>
-          <p>Build smarter resumes with AI. Upload, analyze, and generate a polished professional resume from one dashboard.</p>
-        </div>
-
-        <nav className="top-nav">
-          <button className={`nav-link ${view === "analyze" ? "active" : ""}`} onClick={() => setView("analyze")}>Dashboard</button>
-          <button className="resume-button" onClick={handleBuild}>
-            {building ? "Building..." : "Build Resume"}
-          </button>
-          <div className="status-pill">
-            <span className="status-dot"></span>
-            ready
-          </div>
-          <div className="user-pill">puneet</div>
-          <button className="logout-pill">logout</button>
-        </nav>
+    <div className="app-shell">
+      <header className="hero-pill glass-card animated-card">
+        <div className="hero-label">RESUME.AI</div>
       </header>
 
-      <main className="app-main">
-        <section className="panel glass-card">
-          {view === "analyze" ? (
-            <>
-              <h2>Resume Dashboard</h2>
-              <p>Upload your resume PDF and paste the job description to get a match score, missing keywords, and suggestions.</p>
-              <UploadForm onResult={(data) => setAnalysis(data)} />
-            </>
-          ) : (
-            <>
-              <h2>Resume Builder</h2>
-              <p>Generate a polished professional resume from your latest analysis.</p>
-              {analysis ? (
-                <div className="builder-panel">
-                  <p><strong>Current file:</strong> {analysis.fileName}</p>
-                  <p><strong>Match score:</strong> {analysis.result.matchScore}%</p>
-                  <button className="action-button" onClick={handleBuild} disabled={building}>
-                    {building ? "Building resume..." : "Build Professional Resume"}
-                  </button>
-                  {buildError && <p className="error-text">{buildError}</p>}
-                </div>
-              ) : (
-                <div className="empty-panel">
-                  <p>Analyze a resume first, then open the builder tab to create the final resume.</p>
-                </div>
-              )}
-            </>
-          )}
+      <div className="dashboard-grid">
+        <section className="glass-panel input-card animated-card">
+          <div className="card-header">
+            <div className="card-icon">📝</div>
+            <div>
+              <div className="eyebrow">Input</div>
+              <h2>Drop your resume</h2>
+            </div>
+          </div>
+
+          <UploadForm
+            onResult={(data) => {
+              setAnalysis(data);
+              setHistory((prev) => [data, ...prev]);
+            }}
+          />
         </section>
 
-        <section className="panel glass-card">
-          <h2>Analysis Preview</h2>
-          {analysis ? (
-            <ResultCard result={analysis.result} />
-          ) : (
-            <div className="empty-panel">
-              <p>No analysis available. Upload a resume to get started.</p>
+        <section className="glass-panel preview-card animated-card">
+          <div className="card-header">
+            <div className="card-icon">👁️</div>
+            <div>
+              <div className="eyebrow">Live preview</div>
+              <h2>Resume preview</h2>
             </div>
-          )}
+          </div>
+
+          <div className="preview-content">
+            {analysis ? (
+              <ResultCard result={analysis.result} />
+            ) : (
+              <div className="preview-placeholder">
+                <div className="preview-placeholder-icon">📄</div>
+                <p>Your resume preview will appear here</p>
+              </div>
+            )}
+          </div>
         </section>
-      </main>
+      </div>
+
+      <section className="glass-panel history-card animated-card">
+        <div className="history-header">
+          <div>
+            <div className="eyebrow">Scan History</div>
+            <p className="history-subtitle">Your analyzed resumes will appear here</p>
+          </div>
+          <button className="filter-btn">Filter</button>
+        </div>
+
+        {history.length > 0 ? (
+          <HistoryList
+            history={history}
+            onSelect={(item) => setAnalysis(item)}
+            onClear={() => setHistory([])}
+          />
+        ) : (
+          <div className="history-placeholder">
+            <div className="history-icon">📂</div>
+            <p>No scans yet</p>
+            <span>Upload a resume to start analyzing.</span>
+          </div>
+        )}
+      </section>
+
+      <footer className="bottom-nav glass-card animated-card">
+        <button className={`nav-item ${view === "analyze" ? "active" : ""}`} onClick={() => setView("analyze")}>
+          <span className="nav-icon">📄</span>
+          Resume Analyzer
+        </button>
+        <button className={`nav-item ${view === "builder" ? "active" : ""}`} onClick={() => setView("builder")}>
+          <span className="nav-icon">🧾</span>
+          Resume Builder
+        </button>
+        <button className="nav-item">
+          <span className="nav-icon">👤</span>
+          Profile
+        </button>
+        <button className="nav-item">
+          <span className="nav-icon">⚙️</span>
+          Settings
+        </button>
+      </footer>
     </div>
   );
 }
+
