@@ -9,23 +9,23 @@ services:
     autoDeploy: true
     envVars:
       - key: MONGO_URI
-        value: ''
+        sync: false
       - key: JWT_SECRET
-        value: ''
+        sync: false
       - key: CLIENT_URL
-        value: ''
+        sync: false
       - key: EMAIL_USER
-        value: ''
+        sync: false
       - key: EMAIL_PASS
-        value: ''
+        sync: false
       - key: SMTP_HOST
-        value: ''
+        sync: false
       - key: SMTP_PORT
-        value: ''
+        sync: false
       - key: SMTP_SECURE
-        value: ''
+        sync: false
       - key: GROQ_API_KEY
-        value: ''
+        sync: false
 
 run: |
   curl --request POST \
